@@ -27,3 +27,15 @@ python -m venv mdm_project1_brewerydb
 
 https://www.zenrows.com/blog/scrapy-selenium#implement-selenium4-workaround
 Setup eine file muss manuell in der scrapy-selenium library angepasst werden
+
+
+#Docker Build
+
+
+```
+#Built local image
+docker build -t mdm-brewerydb .
+
+# Testen, ob App funktional
+docker run --name mdm-brewerydb -p 5000:5000 mdm-brewerydb
+```

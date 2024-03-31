@@ -48,7 +48,7 @@ else:
     print(os.environ)
     print("AZURE_STORAGE_CONNECTION_STRING not set")
 
-file_path = Path(".", "../../res/model/", "GradientBoostingRegressor.pkl")
+file_path = Path(".", "res/model/", "GradientBoostingRegressor.pkl")
 with open(file_path, 'rb') as fid:
     model = pickle.load(fid)
 
@@ -80,3 +80,7 @@ def api_predict():
     return jsonify({
         'abv': str(abv)
     })
+
+if __name__ == '__main__':
+    # host='0.0.0.0' damit lokaler Zugriff auf Port 5000 funktioniert
+    app.run(host='0.0.0.0', debug=True)
