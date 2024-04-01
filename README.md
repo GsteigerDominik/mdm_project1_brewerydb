@@ -34,8 +34,22 @@ Setup eine file muss manuell in der scrapy-selenium library angepasst werden
 
 ```
 #Built local image
-docker build -t mdm-brewerydb .
+docker build -t dominikgsteiger/mdm-brewerydb .
 
 # Testen, ob App funktional
-docker run --name mdm-brewerydb -p 5000:5000 mdm-brewerydb
+docker run --name mdm-brewerydb -p 5000:5000 dominikgsteiger/mdm-brewerydb
+
+docker push dominikgsteiger/mdm-brewerydb:latest
+
+
+#Azure Cheatsheet
+Wechseln von Subscription/abo auf Azure for Bildungseinrichtung war nötig
+#Azure Login
+az login
+
+#Azure Ressourcengruppe erstellen (once)
+az group create --location switzerlandnorth --name mdm-brewerydb
+
+#Azure Environment erstellen (once)
+ az container create --resource-group mdm-brewerydb --name mdm-brewerydb --image dominikgsteiger/mdm-brewerydb:latest --dns-name-label mdm-brewerydb --ports 5000
 ```

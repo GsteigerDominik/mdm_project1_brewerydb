@@ -18,7 +18,7 @@ function predict() {
         color_srm: color_srm
     });
 
-    fetch(`http://127.0.0.1:5000/api/predict?${queryParams}`)
+    fetch(`/api/predict?${queryParams}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
