@@ -20,30 +20,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Echo content of source file
-        run: |
-          echo "Content of source file:"
-          cat src/load/scraper/static/middlewares.py
-
-      - name: Echo content of destination file before overwrite
-        run: |
-          echo "Content of destination file before overwrite:"
-          cat /opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/scrapy_selenium/middlewares.py
-
       - name: Overwrite middlewares file in Selenium Python library
         run: |
           cp src/load/scraper/static/middlewares.py /opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/scrapy_selenium/middlewares.py || echo "Failed to copy file"
 
-      - name: Echo content of destination file after overwrite
-        run: |
-          echo "Content of destination file after overwrite:"
-          cat /opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/scrapy_selenium/middlewares.py
-
-      - name: Start Scraping
+      - name: Scrape Data
         run: |
           cd src/load/scraper
           scrapy crawl beer-spider -o ../../../res/data/raw_data.json -s CLOSESPIDER_PAGECOUNT=10
           cd ../../../
 
-      - name: Start Python class 2
-        run: python data_load/mongo_db_import.py -u ${{ secrets.MONGODB_CONNECTION }} -i ./res/data/output.json -c beer
+      - name: Transform Data
+        run: python src/load/transform/mongo_db_import.py -u ${{ secrets.MONGODB_CONNECTIONSTRING }} -i ./res/data/output.json -c beer
+
+      - name: Train Model
+        run: python src/model/model.py -u ${{ secrets.MONGODB_CONNECTIONSTRING }} -p ./res/model/${GITHUB_RUN_NUMBER}
+
+      - name: Create Branch and Pull Request
+        run: |
+          git checkout -b model/${GITHUB_RUN_NUMBER} main
+          git add --all
+          git commit -m "Trained new model after scraping"
+          git push
