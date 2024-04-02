@@ -1,0 +1,29 @@
+name: Scrape, Transform, Train, Open Merge request
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12.1"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Start Scraping
+        run: cd src/load/scraper
+            scrapy crawl beer-spider -o ../../../res/data/raw_data.json -s CLOSESPIDER_PAGECOUNT=10
+            cd ../../../
+
+      - name: Start Python class 2
+        run: python data_load/mongo_db_import.py -u ${{ secrets.MONGODB_CONNECTION }} -i ./res/data/output.json -c beer
