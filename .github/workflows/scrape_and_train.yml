@@ -21,9 +21,10 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Start Scraping
-        run: cd src/load/scraper
-            scrapy crawl beer-spider -o ../../../res/data/raw_data.json -s CLOSESPIDER_PAGECOUNT=10
-            cd ../../../
+        run: |
+          cd src/load/scraper
+          scrapy crawl beer-spider -o ../../../res/data/raw_data.json -s CLOSESPIDER_PAGECOUNT=10
+          cd ../../../
 
       - name: Start Python class 2
         run: python data_load/mongo_db_import.py -u ${{ secrets.MONGODB_CONNECTION }} -i ./res/data/output.json -c beer
