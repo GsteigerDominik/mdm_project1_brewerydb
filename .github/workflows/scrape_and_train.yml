@@ -47,4 +47,5 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
-        title: 'Automatically calculated a new model'
+        with:
+          title: 'Automatically calculated a new model'
