@@ -97,7 +97,7 @@ FEED_EXPORT_ENCODING = "utf-8"
 SELENIUM_DRIVER_NAME = 'chrome'
 SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver')
 SELENIUM_DRIVER_ARGUMENTS = [
-    #'--headless',
+    '--headless',
     '--disable-javascript=false',
     '--enable-cookies',
     '--disable-gpu',
