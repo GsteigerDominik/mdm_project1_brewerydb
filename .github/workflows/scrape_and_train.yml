@@ -20,10 +20,24 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Echo content of source file
+        run: |
+          echo "Content of source file:"
+          cat src/load/scraper/static/middlewares.py
+
+      - name: Echo content of destination file before overwrite
+        run: |
+          echo "Content of destination file before overwrite:"
+          cat /opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/scrapy_selenium/middlewares.py
+
       - name: Overwrite middlewares file in Selenium Python library
         run: |
-          cp src/load/scraper/static/middlewares.py /opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/scrapy_selenium/middlewares.py
+          cp src/load/scraper/static/middlewares.py /opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/scrapy_selenium/middlewares.py || echo "Failed to copy file"
 
+      - name: Echo content of destination file after overwrite
+        run: |
+          echo "Content of destination file after overwrite:"
+          cat /opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/scrapy_selenium/middlewares.py
 
       - name: Start Scraping
         run: |
