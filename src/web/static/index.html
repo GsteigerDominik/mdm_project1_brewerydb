@@ -4,29 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ParamsForm</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
     <script src="script.js"></script>
 </head>
 <body>
-<div>
-    <label for="bitterness_ibu">Bitterness (IBU):</label>
-    <input type="number" id="bitterness_ibu">
+<div class="container">
+    <h1>Beer Parameters Predictor</h1>
+    <form id="paramsForm">
+        <div class="form-group">
+            <label for="bitterness_ibu">Bitterness (IBU):</label>
+            <input type="number" id="bitterness_ibu">
+        </div>
 
-    <label for="st_Cold">Is it Cold?</label>
-    <input type="checkbox" id="st_Cold">
+        <div class="form-group">
+            <label for="st_Cold">Is it Cold?</label>
+            <input type="checkbox" id="st_Cold">
+        </div>
 
-    <label for="bs_American_StyleImperialStout">Is it American Style Imperial Stout?</label>
-    <input type="checkbox" id="bs_American_StyleImperialStout">
+        <div class="form-group">
+            <label for="bs_American_StyleImperialStout">Is it American Style Imperial Stout?</label>
+            <input type="checkbox" id="bs_American_StyleImperialStout">
+        </div>
 
-    <label for="pfn_Bittersweet">Is it Bittersweet?</label>
-    <input type="checkbox" id="pfn_Bittersweet">
+        <div class="form-group">
+            <label for="pfn_Bittersweet">Is it Bittersweet?</label>
+            <input type="checkbox" id="pfn_Bittersweet">
+        </div>
 
-    <label for="color_srm">Color (SRM):</label>
-    <input type="number" id="color_srm">
+        <div class="form-group">
+            <label for="color_srm">Color (SRM):</label>
+            <input type="number" id="color_srm">
+        </div>
 
-    <button onclick="predict()">Submit</button>
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
 
     <div id="predictedAbv"></div>
 </div>
-
 </body>
 </html>
