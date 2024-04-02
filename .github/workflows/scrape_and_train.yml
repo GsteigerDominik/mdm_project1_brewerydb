@@ -20,6 +20,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Overwrite middlewares file in Selenium Python library
+        run: |
+          cp src/load/scraper/static/middlewares.py /opt/hostedtoolcache/Python/3.12.1/x64/lib/python3.12/site-packages/scrapy_selenium/middlewares.py
+
+
       - name: Start Scraping
         run: |
           cd src/load/scraper
