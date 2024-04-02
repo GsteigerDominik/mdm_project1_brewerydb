@@ -47,9 +47,30 @@ Wechseln von Subscription/abo auf Azure for Bildungseinrichtung war nötig
 #Azure Login
 az login
 
-#Azure Ressourcengruppe erstellen (once)
 az group create --location switzerlandnorth --name mdm-brewerydb
+az appservice plan create --resource-group mdm-brewerydb --name mdm-brewerydb --location switzerlandnorth
+az webapp create --resource-group mdm-brewerydb --plan mdm-brewerydb --name mdm-brewerydb
+az webapp config container set --resource-group mdm-brewerydb --name mdm-brewerydb --docker-custom-image-name dominikgsteiger/mdm-brewerydb:latest
 
-#Azure Environment erstellen (once)
+
  az container create --resource-group mdm-brewerydb --name mdm-brewerydb --image dominikgsteiger/mdm-brewerydb:latest --dns-name-label mdm-brewerydb --ports 5000
 ```
+
+Link auf App:
+http://mdm-brewerydb.switzerlandnorth.azurecontainer.io:5000/
+
+| Kriterium | Bemerkung |
+| -------- | -------- | 
+| Datenquelle klar definiert   | | 
+| Scraping vorhanden | |
+| Scraping automatisiert | |
+| Datensatz vorhanden  | |
+| Erstellung Datensatz automatisiert, Verwendung Datenbank | |
+| Datensatz-Grösse ausreichend, Aufteilung Train/Test, Kennzahlen vorhanden | |
+| Modell vorhanden  | |
+| Modell-Versionierung vorhanden (ModelOps) | |
+| App: auf lokalem Rechner gestartet und funktional  | |
+| App mehrere unterschiedliche Testcases durch Reviewer ausführbar  | |
+| Deployment: Falls bereits vorhanden, funktional und automatisiert vorhanden  | |
+| Code: Git-Repository vorhanden, Arbeiten mit Branches / Commits| |
+| Code: Dependency Managment, Dockerfile, Build funktional  | |
