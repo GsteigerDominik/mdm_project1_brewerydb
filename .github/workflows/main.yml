@@ -1,4 +1,4 @@
-name: CI/CD Pipeline 
+name: CI/CD Pipeline
 
 on:
   push:
@@ -8,6 +8,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3
+
       - name: Generate Docker Tag
         id: docker_tag
         run: echo "::set-output name=tag::dominikgsteiger/mdm-brewerydb:build-${GITHUB_RUN_NUMBER}"
