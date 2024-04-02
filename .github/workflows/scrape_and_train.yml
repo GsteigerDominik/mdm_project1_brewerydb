@@ -40,5 +40,7 @@ jobs:
         run: |
           git checkout -b model/${GITHUB_RUN_NUMBER}
           git add --all
+          git config --global user.email "dominik.gsteiger@gmail.com"
+          git config --global user.name "GsteigerDominik"
           git commit -m "Trained new model after scraping"
           git push
