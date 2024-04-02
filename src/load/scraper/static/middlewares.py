@@ -1,11 +1,13 @@
-from importlib import import_module
+"""This module contains the ``SeleniumMiddleware`` scrapy middleware"""
 
+from importlib import import_module
 from scrapy import signals
 from scrapy.exceptions import NotConfigured
 from scrapy.http import HtmlResponse
 from selenium.webdriver.support.ui import WebDriverWait
 
 from .http import SeleniumRequest
+
 
 class SeleniumMiddleware:
     """Scrapy middleware handling the requests using selenium"""
@@ -43,32 +45,24 @@ class SeleniumMiddleware:
         for argument in driver_arguments:
             driver_options.add_argument(argument)
 
-        driver_kwargs = {
-            'executable_path': driver_executable_path,
-            f'{driver_name}_options': driver_options
-        }
-
         # locally installed driver
         if driver_executable_path is not None:
-            driver_kwargs = {
+            service_module = import_module(f'{webdriver_base_path}.service')
+            service_klass = getattr(service_module, 'Service')
+            service_kwargs = {
                 'executable_path': driver_executable_path,
-                f'{driver_name}_options': driver_options
+            }
+            service = service_klass(**service_kwargs)
+            driver_kwargs = {
+                'service': service,
+                'options': driver_options
             }
             self.driver = driver_klass(**driver_kwargs)
         # remote driver
         elif command_executor is not None:
             from selenium import webdriver
-            capabilities = driver_options.to_capabilities()
             self.driver = webdriver.Remote(command_executor=command_executor,
-                                           desired_capabilities=capabilities)
-        # webdriver-manager
-        else:
-            # selenium4+
-            from selenium import webdriver
-            from selenium.webdriver.chrome.service import Service
-            if driver_name and driver_name.lower() == 'chrome':
-                service = Service()
-                self.driver = webdriver.Chrome(service=service, options=driver_options)
+                                           options=driver_options)
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -83,8 +77,7 @@ class SeleniumMiddleware:
         if driver_name is None:
             raise NotConfigured('SELENIUM_DRIVER_NAME must be set')
 
-        # let's use webdriver-manager when nothing is specified instead | RN just for Chrome
-        if (driver_name.lower() != 'chrome') and (driver_executable_path is None and command_executor is None):
+        if driver_executable_path is None and command_executor is None:
             raise NotConfigured('Either SELENIUM_DRIVER_EXECUTABLE_PATH '
                                 'or SELENIUM_COMMAND_EXECUTOR must be set')
 
