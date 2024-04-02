@@ -4,7 +4,7 @@ import os
 
 from pymongo import MongoClient
 
-from scraper.data_load.parser import *
+from parser import *
 
 
 def cleanup(obj):
