@@ -36,7 +36,7 @@ jobs:
       - name: Train Model
         run: python src/model/model.py -u ${{ secrets.MONGODB_CONNECTIONSTRING }} -p ./res/model/${GITHUB_RUN_NUMBER}
 
-      - name: Create Branch and Pull Request
+      - name: Create Branch, commit and push changes
         run: |
           git checkout -b model/${GITHUB_RUN_NUMBER}
           git add res
@@ -44,3 +44,7 @@ jobs:
           git config --global user.name "GsteigerDominik"
           git commit -m "Trained new model after scraping"
           git push --set-upstream origin model/${GITHUB_RUN_NUMBER}
+
+      - name: Create Pull Request
+          uses: peter-evans/create-pull-request@v6
+          title: 'Automatically calculated a new model'
