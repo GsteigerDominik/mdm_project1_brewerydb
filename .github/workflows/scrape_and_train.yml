@@ -27,11 +27,11 @@ jobs:
       - name: Scrape Data
         run: |
           cd src/load/scraper
-          scrapy crawl beer-spider -o ../../../res/data/raw_data.json -s CLOSESPIDER_PAGECOUNT=10
+          scrapy crawl beer-spider -o ../../../res/data/${GITHUB_RUN_NUMBER}raw_data.json -s CLOSESPIDER_PAGECOUNT=10
           cd ../../../
 
       - name: Transform Data
-        run: python src/load/transform/mongo_db_import.py -u ${{ secrets.MONGODB_CONNECTIONSTRING }} -i res/data/raw_data.json -c beer
+        run: python src/load/transform/mongo_db_import.py -u ${{ secrets.MONGODB_CONNECTIONSTRING }} -i res/data/${GITHUB_RUN_NUMBER}raw_data.json -c beer
 
       - name: Train Model
         run: python src/model/model.py -u ${{ secrets.MONGODB_CONNECTIONSTRING }} -p ./res/model/${GITHUB_RUN_NUMBER}
