@@ -1,6 +1,5 @@
-import time
-
 import scrapy
+import time
 from scrapy_selenium import SeleniumRequest
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -22,6 +21,7 @@ def get_x_parent_from_span_by_text(driver, text, x):
         return element.text
     except AttributeError as err:
         return 'ERROR'
+
 
 def get_x_parent_button_from_span_by_text(driver, text, x):
     try:
@@ -50,17 +50,15 @@ class BeerSpider(scrapy.Spider):
         # waiting 2 seconds for the products to load
 
         subpageUrls = []
-        for i in  range(156):
+        for i in range(3):  # TODO Erhöhen sobald PIPELINE Funktioniert
             time.sleep(5)
             for article in driver.find_elements(By.XPATH, "//article"):
                 url = article.find_element(By.XPATH, "..").get_attribute("href")
                 subpageUrls.append(url)
                 print('Added URL:', url)
 
-            button=get_x_parent_button_from_span_by_text(driver,"Next",1)
+            button = get_x_parent_button_from_span_by_text(driver, "Next", 1)
             button.click()
-
-
 
         for index in range(0, 300):
             url = subpageUrls[index]
