@@ -1,6 +1,9 @@
 name: Scrape, Transform, Train, Open Merge request
 
 on:
+  on:
+    schedule:
+      - cron: '0 0 1 * *' #Run Cron job every month
   workflow_dispatch:
 
 jobs:
@@ -27,7 +30,7 @@ jobs:
       - name: Scrape Data
         run: |
           cd src/load/scraper
-          scrapy crawl beer-spider -o ../../../res/data/${GITHUB_RUN_NUMBER}raw_data.json -s CLOSESPIDER_PAGECOUNT=10
+          scrapy crawl beer-spider -o ../../../res/data/${GITHUB_RUN_NUMBER}raw_data.json
           cd ../../../
 
       - name: Transform Data
@@ -36,18 +39,9 @@ jobs:
       - name: Train Model
         run: python src/model/model.py -u ${{ secrets.MONGODB_CONNECTIONSTRING }} -p ./res/model/${GITHUB_RUN_NUMBER}
 
-      #- name: Create Branch, commit and push changes
-          #run: |
-          #git checkout -b model/${GITHUB_RUN_NUMBER}
-          ##git add res
-          #git config --global user.email "dominik.gsteiger@gmail.com"
-          #git config --global user.name "GsteigerDominik"
-          #git commit -m "Trained new model after scraping"
-        #git push --set-upstream origin model/${GITHUB_RUN_NUMBER}
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          title: 'Automatically calculated a new model'
+          title: 'Scraped and calculated a new model'
           add-paths: res
           branch: model/${GITHUB_RUN_NUMBER}

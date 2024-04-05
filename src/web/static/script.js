@@ -1,4 +1,17 @@
+fetch('/api/model_versions')
+    .then(response => response.json())
+    .then(data => {
+        const dropdown = document.getElementById('model_dropdown');
+        data.forEach(model => {
+            const optionElement = document.createElement('option');
+            optionElement.text = model;
+            dropdown.add(optionElement);
+        });
+    })
+    .catch(error => console.error('Error fetching dropdown values:', error))
+
 function predict() {
+    const model = document.getElementById("model_dropdown").value;
     const bitterness_ibu = parseFloat(document.getElementById("bitterness_ibu").value);
     const st_Cold = document.getElementById("st_Cold").checked;
     const bs_American_StyleImperialStout = document.getElementById("bs_American_StyleImperialStout").checked;
@@ -11,6 +24,7 @@ function predict() {
     }
 
     const queryParams = new URLSearchParams({
+        model:model,
         bitterness_ibu: bitterness_ibu,
         st_Cold: st_Cold,
         bs_American_StyleImperialStout: bs_American_StyleImperialStout,
