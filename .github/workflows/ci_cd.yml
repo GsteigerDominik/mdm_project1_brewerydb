@@ -14,7 +14,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Generate Docker Tag
-        #TODO dont use set-output because its deprecated
         id: docker_tag
         run: echo "::set-output name=tag::dominikgsteiger/mdm-brewerydb:build-${GITHUB_RUN_NUMBER}"
 

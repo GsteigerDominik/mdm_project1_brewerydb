@@ -1,7 +1,6 @@
 import argparse
 import json
 import os
-
 from pymongo import MongoClient
 
 from parser import *
@@ -12,8 +11,8 @@ def cleanup(obj):
         if isinstance(value, list):
             obj[key] = [item for item in obj[key] if item != ""]
         elif isinstance(value, str):
-            if not value.strip():  # Check if the string is empty after stripping whitespace
-                obj[key] = None  # or any other value that indicates an absence of data
+            if not value.strip():
+                obj[key] = None
     obj = {key: value for key, value in obj.items() if value is not []}
     obj = {key: value for key, value in obj.items() if value is not None}
     return obj
@@ -49,8 +48,8 @@ class JsonLinesImporter:
 
     def read_lines(self):
         with open(self.file, encoding='UTF-8') as f:
-            data = f.read().strip()  # Read entire file content and remove leading/trailing whitespace
-            json_list = json.loads(data)  # Decode the JSON array
+            data = f.read().strip()
+            json_list = json.loads(data)
             for item in json_list:
                 yield to_object(item)
 
@@ -80,5 +79,4 @@ if __name__ == '__main__':
                         help="name of the mongodb collection where the tracks should be stored")
     args = parser.parse_args()
     importer = JsonLinesImporter(args.input, collection=args.collection, mongo_uri=args.uri)
-    # importer.save_to_file()
     importer.save_to_mongodb()

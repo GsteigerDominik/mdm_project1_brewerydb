@@ -42,12 +42,8 @@ class BeerSpider(scrapy.Spider):
 
     def parse(self, response):
         driver = response.request.meta["driver"]
-        # scroll to the end of the page 10 times
         for x in range(0, 10):
-            # scroll down by 10000 pixels
             ActionChains(driver).scroll_by_amount(0, 10000).perform()
-
-        # waiting 2 seconds for the products to load
 
         subpageUrls = []
         for i in range(3):  # TODO Erhöhen sobald PIPELINE Funktioniert
@@ -64,14 +60,6 @@ class BeerSpider(scrapy.Spider):
             url = subpageUrls[index]
             yield SeleniumRequest(url=url, callback=self.parse_detailpage)
             time.sleep(1)
-        # beer_name = article.find_element(By.CSS_SELECTOR,".brew-card__title").text
-        # company = article.find_element(By.CSS_SELECTOR,".brew-card__subtitle").text
-
-        # beer= {
-        #    'url':url,
-        #    'beer_name':beer_name,
-        #    'company':company
-        # }
 
     def parse_detailpage(self, response):
         driver = response.request.meta["driver"]

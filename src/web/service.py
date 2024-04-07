@@ -1,28 +1,18 @@
-# python -m flask --debug --app service run (works also in PowerShell)
-
-import datetime
 import os
-import pickle
-from pathlib import Path
-
 import pandas as pd
-from azure.storage.blob import BlobServiceClient
+import pickle
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
+from pathlib import Path
 
-# init app, load model from storage
 print("*** Init and load model ***")
 directory_path = Path(".", "res/model/")
-files=[]
+files = []
 for filename in os.listdir(directory_path):
     files.append(filename)
 
-print(files)
-#with open(directory_path, 'rb') as fid:
-#    model = pickle.load(fid)
-
 print("*** Init Flask App ***")
-app = Flask(__name__,static_url_path='/', static_folder='static')
+app = Flask(__name__, static_url_path='/', static_folder='static')
 cors = CORS(app)
 
 
@@ -30,9 +20,11 @@ cors = CORS(app)
 def indexPage():
     return send_file("static/index.html")
 
+
 @app.route("/api/model_versions")
 def api_model_versions():
     return jsonify(files)
+
 
 @app.route("/api/predict")
 def api_predict():
@@ -43,7 +35,6 @@ def api_predict():
     pfn_Bittersweet = request.args.get('pfn_Bittersweet', default=0, type=bool)
     color_srm = request.args.get('color_srm', default=0, type=int)
 
-    print(model)
     with open(Path(".", "res/model/", model), 'rb') as fid:
         model = pickle.load(fid)
 
@@ -58,6 +49,6 @@ def api_predict():
         'abv': str(abv)
     })
 
+
 if __name__ == '__main__':
-    # host='0.0.0.0' damit lokaler Zugriff auf Port 5000 funktioniert
     app.run(host='0.0.0.0', debug=True)
