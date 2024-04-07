@@ -1,13 +1,29 @@
-#Brewery Db
-Inhaltsverzeichnis
-1. Projektübersicht
+#Mdm Project 1 Brewery Db
+Inhaltsverzeichnis:
+1. Anforderungen 
 2. Daten
-3. Prerequisites
-4. Projekt-Verzeichnisübersicht
-5. Kriterien
-6. Docker Build & Azure Deployment
-7 .Zukünftige Deployments
+3. Model
+4. Architektur & CI / CD
 
+##Anforderungen
+| Kriterium | Bemerkung |
+| -------- | -------- | 
+| Datenquelle klar definiert|Siehe README 2.| 
+| Scraping vorhanden | Code im Folder src/load/scraper, Daten im folder res/data |
+| Scraping automatisiert | Code im Folder src/load/scraper, GitHubAction:  scrape_and_train |
+| Datensatz vorhanden  | Siehe README 2.|
+| Erstellung Datensatz automatisiert, Verwendung Datenbank | Code im Folder src/load/transform|
+| Datensatz-Grösse ausreichend, Aufteilung Train/Test, Kennzahlen vorhanden |Siehe README 3. |
+| Modell vorhanden  | Code im Folder src/load/model, Model im Folder res/model, Weiter Siehe README 3.|
+| Modell-Versionierung vorhanden (ModelOps) | Siehe GitHubAction scrape_train, Siehe README 4. |
+| App: auf lokalem Rechner gestartet und funktional  | Ausführen mit "python src/web/service.py"|
+| App mehrere unterschiedliche Testcases durch Reviewer ausführbar  | Erreichbar unter http://127.0.0.1:5000|
+| Deployment: Falls bereits vorhanden, funktional und automatisiert vorhanden  |GitHubAction: ci-cd |
+| Code: Git-Repository vorhanden, Arbeiten mit Branches / Commits| https://github.com/GsteigerDominik/mdm_project1_brewerydb|
+| Code: Dependency Managment, Dockerfile, Build funktional  | requirements.txt, Dockerfile, GitHubAction: ci-cd |
+##Daten
+
+##Model Training
 #Commands
 ```
 #Activate Env
@@ -59,18 +75,3 @@ az webapp config container set --resource-group mdm-brewerydb --name mdm-brewery
 Link auf App:
 http://mdm-brewerydb.switzerlandnorth.azurecontainer.io:5000/
 
-| Kriterium | Bemerkung |
-| -------- | -------- | 
-| Datenquelle klar definiert   | | 
-| Scraping vorhanden | |
-| Scraping automatisiert | |
-| Datensatz vorhanden  | |
-| Erstellung Datensatz automatisiert, Verwendung Datenbank | |
-| Datensatz-Grösse ausreichend, Aufteilung Train/Test, Kennzahlen vorhanden | |
-| Modell vorhanden  | |
-| Modell-Versionierung vorhanden (ModelOps) | |
-| App: auf lokalem Rechner gestartet und funktional  | |
-| App mehrere unterschiedliche Testcases durch Reviewer ausführbar  | |
-| Deployment: Falls bereits vorhanden, funktional und automatisiert vorhanden  | |
-| Code: Git-Repository vorhanden, Arbeiten mit Branches / Commits| |
-| Code: Dependency Managment, Dockerfile, Build funktional  | |

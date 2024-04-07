@@ -1,9 +1,8 @@
 name: Scrape, Transform, Train, Open Merge request
 
 on:
-  on:
-    schedule:
-      - cron: '0 0 1 * *' #Run Cron job every month
+  schedule:
+    - cron: '0 0 1 * *' #Run Cron job every month
   workflow_dispatch:
 
 jobs:
