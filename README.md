@@ -1,11 +1,10 @@
 #Mdm Project 1 Brewery Db
 Inhaltsverzeichnis:
 1. Anforderungen 
-2. Daten
-3. Model
-4. Architektur & CI / CD
+2. Daten & Model Training
+3. Architektur & CI / CD
 
-##Anforderungen
+##1. Anforderungen
 | Kriterium | Bemerkung |
 | -------- | -------- | 
 | Datenquelle klar definiert|Siehe README 2.| 
@@ -13,17 +12,47 @@ Inhaltsverzeichnis:
 | Scraping automatisiert | Code im Folder src/load/scraper, GitHubAction:  scrape_and_train |
 | Datensatz vorhanden  | Siehe README 2.|
 | Erstellung Datensatz automatisiert, Verwendung Datenbank | Code im Folder src/load/transform|
-| Datensatz-Grösse ausreichend, Aufteilung Train/Test, Kennzahlen vorhanden |Siehe README 3. |
-| Modell vorhanden  | Code im Folder src/load/model, Model im Folder res/model, Weiter Siehe README 3.|
+| Datensatz-Grösse ausreichend, Aufteilung Train/Test, Kennzahlen vorhanden |Siehe README 2. |
+| Modell vorhanden  | Code im Folder src/load/model, Model im Folder res/model, Weiter Siehe README 2.|
 | Modell-Versionierung vorhanden (ModelOps) | Siehe GitHubAction scrape_train, Siehe README 4. |
 | App: auf lokalem Rechner gestartet und funktional  | Ausführen mit "python src/web/service.py"|
 | App mehrere unterschiedliche Testcases durch Reviewer ausführbar  | Erreichbar unter http://127.0.0.1:5000|
 | Deployment: Falls bereits vorhanden, funktional und automatisiert vorhanden  |GitHubAction: ci-cd |
 | Code: Git-Repository vorhanden, Arbeiten mit Branches / Commits| https://github.com/GsteigerDominik/mdm_project1_brewerydb|
 | Code: Dependency Managment, Dockerfile, Build funktional  | requirements.txt, Dockerfile, GitHubAction: ci-cd |
-##Daten
+##2. Daten & Model Training
+Die Daten werden von https://www.brewerydb.com bezogen. Es werden einzelne Biere oder Bierartige Getränke verwendet.
+Der ABV-Wert(Alcohol by Volume) wiederspiegelt das numerische Target. 
+Folgende Features sind vorhanden:
+- Brew Style 
+- SRM ( Standard Reference Method), Farbe von 1 (Ganz Hell z.B. Lager,) bis 40 (Ganz Dunkel z.B. Imperial Stout)
+- Primary Flavor Notes, z.B. Sweet, Malt, Butterscotch, Caramel
+- Serving Temperature, z.B. Cool - 8-12°C / 45-54°F 
+- IBU (International Bitterness Unit) ca. 8-100
 
-##Model Training
+Folgende Features wurden mithilfe von Dummyvariablen vereinfacht:
+- Brewstyle
+- Primary Flavor Notes
+- Serving Temperature
+
+Mithilfe einer forward selection wurden folgende features ausgewählt:
+- Bitterness (IBU), Numeric
+- Cold (Serving Temperature), boolean
+- American Style Imperial Stout (Brew Style), boolean
+- Bittersweet, (Primary FLavor Notes), boolean
+- Color (SRM), Numeric
+
+Model: Lineare Regression:
+- R2: ca 0.5
+- Anzahl Datensätze: 416
+- Anzahl Datensätze in guter Qualität: ca 350
+- Anzahl Training: 70%
+- Anzahl Validation: 30%
+
+
+##3. Architektur & CI / CD
+![ci-cd.png](ci-cd.png)
+![scrape-train.png](scrape-train.png)
 #Commands
 ```
 #Activate Env
@@ -73,7 +102,4 @@ az webapp config container set --resource-group mdm-brewerydb --name mdm-brewery
 ```
 
 Link auf App:
-http://mdm-brewerydb.switzerlandnorth.azurecontainer.io:5000/
-
-![ci-cd.png](ci-cd.png)
-![scrape-train.png](scrape-train.png)
+https://mdm-brewerydb.azurewebsites.net/
