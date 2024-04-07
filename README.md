@@ -75,3 +75,5 @@ az webapp config container set --resource-group mdm-brewerydb --name mdm-brewery
 Link auf App:
 http://mdm-brewerydb.switzerlandnorth.azurecontainer.io:5000/
 
+![ci-cd.png](ci-cd.png)
+![scrape-train.png](scrape-train.png)
